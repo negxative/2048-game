@@ -5,6 +5,8 @@ body{
     font-family: 'VT323', monospace;;
     font-size: 32px;
 }
+
+/* SPACE FOR TITLES */
 .Main{
     display: flex;
     justify-content: space-around;
@@ -13,6 +15,7 @@ body{
     min-height: 100vh;
     color: #640202;
 }
+/* MAIN CONTAINERS FOR TILES */
 .Container{
     display: flex;
     height: 50vhh;
@@ -24,25 +27,29 @@ body{
     border-radius: 8px;
     box-shadow: rgb(196, 196, 196) 0px 0px 10px 5px ;
 }
+/* GAME COMPLETION */
 .gameOver{
     display: none;
 }
 .GameWon{
     display:none;
 }
-.finished{
-    display:none;
-}
+
+
+/* REPRESENTING SCORE CONTAINER */
 .score{
     display: flex;
     justify-content: center;
     align-items: center;
     color: #640202;
 }
+/* REPRESENTING SCORE VALUE */
 .score span{
     margin-left: 5px;
 }
-.Box,.x0{
+
+/* REPRESENTING TILES */
+.Box,.x0{ 
  background: violet;
  width:8vw;
  height: 8vh;
@@ -57,6 +64,9 @@ body{
  box-shadow: rgb(196, 196, 196) 0px 0px 5px 5px ;
     transition: all 0.3s ease-in-out;
 }
+
+
+/* TO KEEP CHANGING COLOURS OF TILES WITH DIFFERENT MULTIPLIERS */
 .x2{
     background: #fffb00;
 }

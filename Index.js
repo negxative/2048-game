@@ -1,20 +1,24 @@
-
 let  grid=[
     [0,0,0,0],
     [0,0,0,0],
     [0,0,0,0],
     [0,0,0,0]
 ]
-let score=0;
-let movesL,movesR,movesU,movesD;
+let score=0; 
+let i=0;
+let movesL,movesR,movesU,movesD; //TO KEEP TRACK OF MOVES LEFT OR NOT
 movesL=movesR=movesU=movesD=1;
+
+
+//FUNCTION TPO CREATE A NEW TILE ON EVERY MOVE AND TO INITIALIZE ON PAGE LOAD
 const createTile=()=>{
     let x=[];
+    //SELECTING ALL THE TILES WITH VALUE 0 AND PUSHING THEM INTO AN ARRAY
     document.querySelectorAll(".x0").forEach(e=>{
         x.push(e);
     })
+    // SELECTING RANDOM INDEX TO GENERATE NEW TILE AT 
     let index=Math.floor(Math.random()*x.length)  
-    console.log(x[index])
     x[index].innerHTML=2;
     x[index].classList.remove("x0");
     x[index].classList.add("x2");
@@ -27,7 +31,7 @@ const createTile=()=>{
 }
 
 
-let i=0;
+//TO GENERATE GRID ON PAGE LOAD WITH VALUE 0
 window.onload=()=>{
     for(let i=0 ; i<4;i++){
         for(let j=0;j<4;j++){
@@ -44,63 +48,59 @@ window.onload=()=>{
 
 
 document.addEventListener("keyup",(e)=>{
-
-   if(movesD==1 || movesL==1 || movesU==1 ||movesR==1){
+    
+    if(movesD==1 || movesL==1 || movesU==1 ||movesR==1){   //TO CHECK GAMEOVER CONDITION
      
     if(e.keyCode==37)
         {
-        try{
-            leftShift();
+        try{                  
+            leftShift();                  //TO SHIFT TOWARDS LEFT
             movesD=movesL=movesR=movesU=1;
         }
         catch(err){
-            console.log("err")
             movesL=0;
         }
         }
     else if(e.keyCode==38){
          try{
-            upShift();
+            upShift();                     //TO SHIFT  TILES UPWARDS
             movesD=movesL=movesR=movesU=1;
         }
         catch(err){
-            console.log("err")
             movesU=0;
         }
         
     }
     else if(e.keyCode==39){
         try{
-            rightShift();
+            rightShift();                    //TO SHIFT TOWARDS RIGHT
             movesD=movesL=movesR=movesU=1;
         }
         catch(err){
-            console.log("err")
             movesR=0;
         }
         }    
     else if(e.keyCode==40){
         try{
-            downShift();
+            downShift();                      //TO SHIFT  DOWNWARDS
             movesD=movesL=movesR=movesU=1;
         }
         catch(err){
             movesD=0;
-            console.log("err")
         }
         }
    }
-   else{
+   else{  //IF GAMEOVER CONDITION FAILS
      document.querySelector(".GameOver").style.display="block";
      document.querySelector(".Container").style.display="none";
    }
 })
 
 
-const merge=(a)=>{
+const merge=(a)=>{  // TO MERGE TILES WITH SAME VALUES
     for(let i=0;i<4;i++){
         for(let j=0;j<a[i].length-1;j++){
-            if(a[i][j]==a[i][j+1]){
+            if(a[i][j]==a[i][j+1]){ //IF TWO TILES WITH SAME VALUES ARE MET
                 a[i][j]*=2;
                 score+=a[i][j];
                 document.querySelector(".scoreCount").innerHTML=score;
@@ -109,22 +109,17 @@ const merge=(a)=>{
             if(a[i][j]==0){
             a[i][j]=a[i][j+1];
             a[i][j+1]=0;
-            
         }
         if(a[i][j]==2048){
             document.querySelector(".GameWon").style.display="block";
             document.querySelector(".Container").style.display="none";
-
         }
-
-       
-        }
-
+     }
  }
  return a;
 }
 
-
+//FUNCTION TO UPDATE THE GRID AFTER MERGING
 const updateGrid=(grid)=>{
     for(let i=0;i<4;i++){
         for(let j=0;j<4;j++){
@@ -142,27 +137,28 @@ const updateGrid=(grid)=>{
 
 
 const leftShift=()=>{
-let a=grid;
+let a=grid; //COPY OF CURRENT GRID TO WORK WITH AND MANIPULATE
         for(let i=0;i<4;i++){
-               a[i]= a[i].filter(index=>index!==0)
+               a[i]= a[i].filter(index=>index!==0) //REMOVING ZEROES FROM HORIZONTAL ARRAYS
         }
 
-    a=merge(a);
-    for(let i=0;i<4;i++){
+    a=merge(a);  //CALLING MERGE TO UPDATE ARRAY BY JOINING TILES WITH SAME VALUES
+    
+    for(let i=0;i<4;i++){   // ADDING ZEROES TO THE END
         for(let j=0;j<4;j++){
             if(j>=a[i].length)
               a[i].push(0);
         }
      }
-     grid =a;
-     updateGrid(grid);
-     createTile();
+     grid =a;   
+     updateGrid(grid); //UPDATING GRID AND MAKE THE CHANGES VISIBLE
+     createTile();    //CREATING NEW TILE 
 }
 
 
 const rightShift=()=>{
 
-let a=grid;
+let a=grid;   //SAME PROCEDURE AS LEFT SHIFT BUT WE REVERSE HORIZONTAL ARRAY MANIPULATE IT AND REVERSE IT BACK
     for(let i=0;i<4;i++){
            a[i]= a[i].filter(index=>index!==0)
            a[i]=a[i].reverse()
@@ -182,28 +178,29 @@ let a=grid;
 
 const upShift=()=>{
 
-    let a=[];
-    for(let j=0;j<4;j++){
+    let a=[];// CREATING A SECONDARY GRID TO WORK WITH WITHOUT ZEROES IN A TRANSPOSED STATE
+    for(let j=0;j<4;j++){  
         let b=[];
         for(let i=0;i<4;i++){
                 if(grid[i][j]!=0)
-                    b.push(grid[i][j]);
+                    b.push(grid[i][j]); //PUSHING NON ZERO ELEMENTS INTO ARRAY
         }
         a.push(b);
     }
-   console.log(a)
-  
-   a=merge(a);
+// NOW WE HAVE TRANSPOSED GRID WITHOUT ZEROES  AND HENCE WE APPLY OPERATIONS SIMILIAR TO leftShift()
+
+
+   a=merge(a);  //merging
     
     for(let i=0;i<a.length;i++){
         for(let j=0;j<4;j++){
             if(j>=a[i].length)
-            a[i].push(0);
+            a[i].push(0);  //adding trailing zeroes
         }
    }
    for(let i=0;i<4;i++){
     for(let j=0;j<4;j++){
-        grid[i][j]=a[j][i];
+        grid[i][j]=a[j][i];  //TRANSPOSING AGAIN TO GET ORIGINAL MATRIX
     }
    }
 
@@ -211,9 +208,9 @@ const upShift=()=>{
    createTile();
 }
 
-const downShift=()=>{
-
-    let a=[];
+const downShift=()=>{       
+        //SIMILIAR OPERATIONS TO  upShift() but WITH REVERSING COLUUMN VALUES
+    let a=[];  
     for(let j=0;j<4;j++){
         let b=[];
         for(let i=0;i<4;i++){
